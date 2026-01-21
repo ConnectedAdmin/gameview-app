@@ -184,4 +184,61 @@ function updateCurrentTime() {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
-        hour:
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true
+    });
+}
+
+// Update last update time
+function updateLastUpdateTime() {
+    const lastUpdateElement = document.getElementById('last-update');
+    const now = new Date();
+    lastUpdateElement.textContent = now.toLocaleTimeString('en-AU', {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true
+    });
+}
+
+// Main function to load and display matches
+async function loadMatches() {
+    const errorDiv = document.getElementById('error');
+    const loading = document.getElementById('loading');
+    
+    try {
+        loading.style.display = 'block';
+        errorDiv.style.display = 'none';
+        
+        const csvText = await fetchCSV();
+        const matches = parseCSV(csvText);
+        
+        displayMatches(matches);
+        updateLastUpdateTime();
+        
+    } catch (error) {
+        console.error('Error loading matches:', error);
+        loading.style.display = 'none';
+        errorDiv.style.display = 'block';
+        errorDiv.textContent = `Error loading matches: ${error.message}. Please check your CSV URL configuration.`;
+    }
+}
+
+// Initialize the app
+async function init() {
+    updateCurrentTime();
+    setInterval(updateCurrentTime, 1000);
+    
+    await loadMatches();
+    
+    setInterval(loadMatches, 2 * 60 * 1000);
+}
+
+// Start the app when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+} else {
+    init();
+}
