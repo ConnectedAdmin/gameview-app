@@ -1,7 +1,8 @@
 // Direct CSV URL Access - No authentication needed
 
 const CONFIG = {
-    csvUrl: 'https://ibasnakepit-my.sharepoint.com/:x:/g/personal/connectedadmin_snakepit_com_au/IQDmM4I0gb1gQ6k3gypjqsu6AYlZtF0VvvKRSSnZMQCSjR4?download=1'  // Replace with your OneDrive direct download link
+    csvUrl: 'https://gameviewstorage.blob.core.windows.net/csvfiles/todays_matches.csv'
+    //csvUrl: 'https://ibasnakepit-my.sharepoint.com/:x:/g/personal/connectedadmin_snakepit_com_au/IQDmM4I0gb1gQ6k3gypjqsu6AYlZtF0VvvKRSSnZMQCSjR4?download=1'  // Replace with your OneDrive direct download link
 };
 
 // Fetch CSV from URL
