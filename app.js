@@ -1,7 +1,7 @@
 // Direct CSV URL Access - No authentication needed
 
 const CONFIG = {
-    csvUrl: 'https://ibasnakepit-my.sharepoint.com/:x:/g/personal/connectedadmin_snakepit_com_au/IQBFRCLDOjWsRqJWvTdfIQaQAWowp3xUthmtplJ6CDAPJ2w?e=V2HC1e'  // Replace with your OneDrive direct download link
+    csvUrl: 'https://ibasnakepit-my.sharepoint.com/:x:/g/personal/connectedadmin_snakepit_com_au/IQBFRCLDOjWsRqJWvTdfIQaQAWowp3xUthmtplJ6CDAPJ2w?download=1'  // Replace with your OneDrive direct download link
 };
 
 // Fetch CSV from URL
