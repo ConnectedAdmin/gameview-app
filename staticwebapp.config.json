@@ -16,7 +16,7 @@
     }
   },
   "globalHeaders": {
-    "content-security-policy": "default-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.microsoft.com https://*.microsoftonline.com https://*.sharepoint.com https://graph.microsoft.com",
+    "content-security-policy": "default-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.blob.core.windows.net https://*.microsoft.com https://*.microsoftonline.com https://*.sharepoint.com https://graph.microsoft.com; connect-src 'self' https://*.blob.core.windows.net",
     "cache-control": "no-cache"
   },
   "mimeTypes": {
