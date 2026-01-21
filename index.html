@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game View - Court Display</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏀 Game View - Today's Matches</h1>
+            <div id="current-time"></div>
+        </header>
+        
+        <div id="loading" class="loading">Loading matches...</div>
+        <div id="error" class="error" style="display: none;"></div>
+        
+        <div id="courts-container" class="courts-grid"></div>
+        
+        <footer>
+            <p>Last updated: <span id="last-update"></span></p>
+            <p>Auto-refreshes every 2 minutes</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
