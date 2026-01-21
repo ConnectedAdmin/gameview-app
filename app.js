@@ -9,7 +9,7 @@ const CONFIG = {
 // OneDrive file details
 const ONEDRIVE_CONFIG = {
     // Option 1: Direct share link (easier setup)
-    shareLink: 'YOUR_ONEDRIVE_SHARE_LINK', // Replace with your shared CSV link
+    shareLink: 'https://ibasnakepit-my.sharepoint.com/:x:/g/personal/connectedadmin_snakepit_com_au/IQCDtVwWw0ewRqPUxj9mjtYBAUWHSNGRUHVeY8WjlSNA6EQ?download=1', // Replace with your shared CSV link
     
     // Option 2: File path (if using app authentication)
     filePath: '/OneDrive - Illawarra Basketball Association/Data/Fixture/BasketballConnect/todays_matches.csv'
