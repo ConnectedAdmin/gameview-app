@@ -109,9 +109,7 @@ function getNextMatchPerCourt(matches) {
             }
         }
         
-        if (nextMatch) {
-            nextMatches[court] = nextMatch;
-        }
+        nextMatches[court] = nextMatch; // Set to null if no match found
     });
     
     return nextMatches;
@@ -128,15 +126,6 @@ function displayMatches(matches) {
     container.innerHTML = '';
     
     const nextMatches = getNextMatchPerCourt(matches);
-    
-    if (Object.keys(nextMatches).length === 0) {
-        container.innerHTML = `
-            <div class="no-matches">
-                <h2>No Games Scheduled</h2>
-            </div>
-        `;
-        return;
-    }
     
     // Define court logos mapping
     const courtLogos = {
@@ -163,14 +152,6 @@ function displayMatches(matches) {
     
     sortedCourts.forEach(court => {
         const match = nextMatches[court];
-        const now = new Date();
-        const matchTime = match.parsedTime;
-        const tenMinutesAfterStart = new Date(matchTime.getTime() + 10 * 60 * 1000);
-        
-        // Determine if match is live or upcoming
-        const isLive = now >= matchTime && now < tenMinutesAfterStart;
-        const statusClass = isLive ? 'status-live' : 'status-upcoming';
-        const statusText = isLive ? 'LIVE NOW' : 'UPCOMING';
         
         // Find matching court info
         let courtInfo = { name: 'COURT', sponsor: '', logo: '' };
@@ -183,28 +164,55 @@ function displayMatches(matches) {
         
         const card = document.createElement('div');
         card.className = 'court-card';
-        card.innerHTML = `
-            <div class="court-logo">
-                <div class="court-logo-placeholder">${courtInfo.name.split(' ')[1] || courtInfo.name[0]}</div>
-            </div>
-            <div>
-                <div class="court-header">
-                    <div class="court-name">${courtInfo.name}</div>
+        
+        if (match) {
+            // Display match information
+            const now = new Date();
+            const matchTime = match.parsedTime;
+            const tenMinutesAfterStart = new Date(matchTime.getTime() + 10 * 60 * 1000);
+            
+            const isLive = now >= matchTime && now < tenMinutesAfterStart;
+            const statusClass = isLive ? 'status-live' : 'status-upcoming';
+            
+            card.innerHTML = `
+                <div class="court-logo">
+                    <div class="court-logo-placeholder">${courtInfo.name.split(' ')[1] || courtInfo.name[0]}</div>
                 </div>
-                <div class="match-info">
-                    <div class="team">
-                        <span class="team-name">${escapeHtml(match['Team 1'] || 'TBA')}</span>
+                <div>
+                    <div class="court-header">
+                        <div class="court-name">${courtInfo.name}</div>
                     </div>
-                    <div class="vs-divider">vs</div>
-                    <div class="team">
-                        <span class="team-name">${escapeHtml(match['Team 2'] || 'TBA')}</span>
-                    </div>
-                    <div class="match-time">
-                        ${escapeHtml(match.Time)}
+                    <div class="match-info">
+                        <div class="team">
+                            <span class="team-name">${escapeHtml(match['Team 1'] || 'TBA')}</span>
+                        </div>
+                        <div class="vs-divider">vs</div>
+                        <div class="team">
+                            <span class="team-name">${escapeHtml(match['Team 2'] || 'TBA')}</span>
+                        </div>
+                        <div class="match-time">
+                            ${escapeHtml(match.Time)}
+                        </div>
                     </div>
                 </div>
-            </div>
-        `;
+            `;
+        } else {
+            // Display "No Games Scheduled" for this court
+            card.innerHTML = `
+                <div class="court-logo">
+                    <div class="court-logo-placeholder">${courtInfo.name.split(' ')[1] || courtInfo.name[0]}</div>
+                </div>
+                <div>
+                    <div class="court-header">
+                        <div class="court-name">${courtInfo.name}</div>
+                    </div>
+                    <div class="match-info">
+                        <div class="no-game-message">No Games Scheduled</div>
+                    </div>
+                </div>
+            `;
+        }
+        
         container.appendChild(card);
     });
 }
