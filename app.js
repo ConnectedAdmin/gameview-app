@@ -2,7 +2,6 @@
 
 const CONFIG = {
     csvUrl: 'https://gameviewstorage.blob.core.windows.net/csvfiles/todays_matches.csv'
-    //csvUrl: 'https://ibasnakepit-my.sharepoint.com/:x:/g/personal/connectedadmin_snakepit_com_au/IQDmM4I0gb1gQ6k3gypjqsu6AYlZtF0VvvKRSSnZMQCSjR4?download=1'  // Replace with your OneDrive direct download link
 };
 
 // Fetch CSV from URL
@@ -38,24 +37,36 @@ function parseMatchTime(timeStr, dateStr) {
         return null;
     }
     
-    const dateParts = dateStr.split('-');
-    const year = parseInt(dateParts[0]);
-    const month = parseInt(dateParts[1]) - 1;
-    const day = parseInt(dateParts[2]);
+    // Handle both YYYY-MM-DD and M/D/YYYY formats
+    let year, month, day;
+    if (dateStr.includes('-')) {
+        // YYYY-MM-DD format
+        const dateParts = dateStr.split('-');
+        year = parseInt(dateParts[0]);
+        month = parseInt(dateParts[1]) - 1;
+        day = parseInt(dateParts[2]);
+    } else {
+        // M/D/YYYY format
+        const dateParts = dateStr.split('/');
+        month = parseInt(dateParts[0]) - 1;
+        day = parseInt(dateParts[1]);
+        year = parseInt(dateParts[2]);
+    }
     
-    const timeMatch = timeStr.match(/(\d{1,2}):(\d{2})\s*(AM|PM)?/i);
+    // Parse time - handle both "PM" and "pm"
+    const timeMatch = timeStr.match(/(\d{1,2}):(\d{2})\s*(AM|PM|am|pm)?/i);
     if (!timeMatch) {
         return null;
     }
     
     let hours = parseInt(timeMatch[1]);
     const minutes = parseInt(timeMatch[2]);
-    const period = timeMatch[3];
+    const period = timeMatch[3] ? timeMatch[3].toUpperCase() : null;
     
     if (period) {
-        if (period.toUpperCase() === 'PM' && hours !== 12) {
+        if (period === 'PM' && hours !== 12) {
             hours += 12;
-        } else if (period.toUpperCase() === 'AM' && hours === 12) {
+        } else if (period === 'AM' && hours === 12) {
             hours = 0;
         }
     }
