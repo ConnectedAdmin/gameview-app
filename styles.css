@@ -5,156 +5,200 @@
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    font-family: Arial, Helvetica, sans-serif;
+    background: #000000;
     min-height: 100vh;
-    padding: 20px;
+    padding: 0;
+    overflow-x: auto;
 }
 
 .container {
-    max-width: 1400px;
-    margin: 0 auto;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
 }
 
 header {
     text-align: center;
     color: white;
-    margin-bottom: 30px;
+    padding: 20px;
+    background: #000000;
 }
 
 header h1 {
-    font-size: 2.5em;
+    font-size: 2em;
     margin-bottom: 10px;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    font-weight: normal;
 }
 
 #current-time {
-    font-size: 1.2em;
-    opacity: 0.9;
+    font-size: 1em;
+    opacity: 0.8;
 }
 
 .loading, .error {
     text-align: center;
     padding: 40px;
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    color: white;
     font-size: 1.2em;
 }
 
 .error {
-    background: #fee;
-    color: #c00;
+    color: #ff6b6b;
 }
 
+/* Horizontal scrolling courts grid */
 .courts-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 25px;
-    margin-bottom: 30px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 40px 20px;
+    gap: 30px;
+    overflow-x: auto;
+    min-height: 400px;
 }
 
+/* Court card styling - similar to Webflow */
 .court-card {
-    background: white;
-    border-radius: 15px;
-    padding: 25px;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.court-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 24px rgba(0,0,0,0.3);
-}
-
-.court-header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    padding: 15px;
-    border-radius: 10px;
-    margin-bottom: 20px;
+    background: #000000;
+    border: none;
+    padding: 0;
+    min-width: 280px;
+    max-width: 280px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     text-align: center;
 }
 
-.court-name {
-    font-size: 1.5em;
+/* Court logo */
+.court-logo {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+.court-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Placeholder logo styling */
+.court-logo-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5em;
     font-weight: bold;
-    margin-bottom: 5px;
+    color: #333;
+}
+
+/* Court header */
+.court-header {
+    background: transparent;
+    color: white;
+    padding: 0;
+    margin-bottom: 15px;
+    text-align: center;
+    width: 100%;
+}
+
+.court-name {
+    font-size: 2em;
+    font-weight: normal;
+    font-style: italic;
+    margin-bottom: 10px;
+    color: white;
+    letter-spacing: 1px;
 }
 
 .match-time {
-    font-size: 1.1em;
-    opacity: 0.95;
+    font-size: 1em;
+    color: white;
+    font-weight: normal;
+    margin-top: 5px;
 }
 
+/* Match info */
 .match-info {
-    padding: 15px 0;
+    padding: 0;
+    width: 100%;
+    color: white;
 }
 
 .team {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px;
-    margin: 8px 0;
-    background: #f8f9fa;
-    border-radius: 8px;
-    font-size: 1.1em;
-    font-weight: 500;
+    padding: 8px 0;
+    margin: 5px 0;
+    background: transparent;
+    font-size: 1em;
+    color: white;
+    text-align: center;
 }
 
 .team-label {
-    color: #666;
-    font-size: 0.9em;
-    margin-right: 10px;
+    color: #999;
+    font-size: 0.85em;
+    margin-right: 5px;
 }
 
 .team-name {
-    flex: 1;
-    color: #333;
+    color: white;
+    font-weight: normal;
 }
 
 .vs-divider {
     text-align: center;
-    font-size: 1.2em;
-    font-weight: bold;
-    color: #667eea;
-    margin: 10px 0;
+    font-size: 1em;
+    font-weight: normal;
+    color: white;
+    margin: 8px 0;
 }
 
 .match-id {
     text-align: center;
     margin-top: 15px;
-    padding-top: 15px;
-    border-top: 2px solid #e0e0e0;
-    color: #666;
-    font-size: 0.95em;
+    padding-top: 10px;
+    color: #999;
+    font-size: 0.85em;
 }
 
+/* No matches message */
 .no-matches {
     text-align: center;
     padding: 60px 20px;
-    background: white;
-    border-radius: 15px;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    color: white;
+    width: 100%;
 }
 
 .no-matches h2 {
-    color: #667eea;
+    color: white;
     font-size: 2em;
     margin-bottom: 10px;
+    font-style: italic;
 }
 
 .no-matches p {
-    color: #666;
+    color: #999;
     font-size: 1.2em;
 }
 
+/* Footer */
 footer {
     text-align: center;
-    color: white;
-    margin-top: 30px;
-    opacity: 0.9;
+    color: #666;
+    padding: 20px;
+    font-size: 0.9em;
 }
 
 footer p {
@@ -191,14 +235,43 @@ footer p {
 /* Responsive design */
 @media (max-width: 768px) {
     header h1 {
-        font-size: 1.8em;
+        font-size: 1.5em;
     }
     
     .courts-grid {
-        grid-template-columns: 1fr;
+        padding: 20px 10px;
+        gap: 20px;
+    }
+    
+    .court-card {
+        min-width: 240px;
+        max-width: 240px;
+    }
+    
+    .court-logo {
+        width: 100px;
+        height: 100px;
     }
     
     .court-name {
-        font-size: 1.3em;
+        font-size: 1.5em;
     }
+}
+
+/* Scrollbar styling for horizontal scroll */
+.courts-grid::-webkit-scrollbar {
+    height: 8px;
+}
+
+.courts-grid::-webkit-scrollbar-track {
+    background: #1a1a1a;
+}
+
+.courts-grid::-webkit-scrollbar-thumb {
+    background: #444;
+    border-radius: 4px;
+}
+
+.courts-grid::-webkit-scrollbar-thumb:hover {
+    background: #666;
 }

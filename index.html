@@ -8,20 +8,15 @@
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>🏀 Game View - Today's Matches</h1>
-            <div id="current-time"></div>
-        </header>
-        
         <div id="loading" class="loading">Loading matches...</div>
         <div id="error" class="error" style="display: none;"></div>
         
         <div id="courts-container" class="courts-grid"></div>
         
-        <footer>
+        <footer style="display: none;">
             <p>Last updated: <span id="last-update"></span></p>
-            <p>Auto-refreshes every 2 minutes</p>
         </footer>
+        <div id="current-time" style="display: none;"></div>
     </div>
 
     <script src="app.js"></script>

@@ -132,14 +132,35 @@ function displayMatches(matches) {
     if (Object.keys(nextMatches).length === 0) {
         container.innerHTML = `
             <div class="no-matches">
-                <h2>No upcoming matches</h2>
+                <h2>No Games Scheduled</h2>
                 <p>There are no more matches scheduled for today.</p>
             </div>
         `;
         return;
     }
     
-    const sortedCourts = Object.keys(nextMatches).sort();
+    // Define court logos mapping
+    const courtLogos = {
+        'The Snakepit-1': { name: 'COURT 1', sponsor: 'Treadright Podiatry & Biomechanics', logo: 'https://via.placeholder.com/120/4A90E2/FFFFFF?text=TR' },
+        'The Snakepit-2': { name: 'COURT 2', sponsor: 'Active', logo: 'https://via.placeholder.com/120/E94B3C/FFFFFF?text=A' },
+        'The Snakepit-3': { name: 'COURT 3', sponsor: 'Innovatus Projects', logo: 'https://via.placeholder.com/120/7ED321/FFFFFF?text=IP' },
+        'The Snakepit-4': { name: 'COURT 4', sponsor: 'Gateway Ford', logo: 'https://via.placeholder.com/120/003D7A/FFFFFF?text=GF' },
+        'Beaton Park': { name: 'BEATON PARK', sponsor: '', logo: 'https://via.placeholder.com/120/666666/FFFFFF?text=BP' }
+    };
+    
+    // Sort courts in order: Court 1, 2, 3, 4, Beaton Park
+    const courtOrder = ['The Snakepit-1', 'The Snakepit-2', 'The Snakepit-3', 'The Snakepit-4', 'Beaton Park'];
+    const sortedCourts = Object.keys(nextMatches).sort((a, b) => {
+        // Match court names that start with the keys
+        const courtA = courtOrder.find(c => a.startsWith(c)) || a;
+        const courtB = courtOrder.find(c => b.startsWith(c)) || b;
+        const indexA = courtOrder.indexOf(courtA);
+        const indexB = courtOrder.indexOf(courtB);
+        
+        if (indexA === -1) return 1;
+        if (indexB === -1) return -1;
+        return indexA - indexB;
+    });
     
     sortedCourts.forEach(court => {
         const match = nextMatches[court];
@@ -147,33 +168,41 @@ function displayMatches(matches) {
         const matchTime = match.parsedTime;
         const tenMinutesAfterStart = new Date(matchTime.getTime() + 10 * 60 * 1000);
         
+        // Determine if match is live or upcoming
         const isLive = now >= matchTime && now < tenMinutesAfterStart;
         const statusClass = isLive ? 'status-live' : 'status-upcoming';
         const statusText = isLive ? 'LIVE NOW' : 'UPCOMING';
         
+        // Find matching court info
+        let courtInfo = { name: 'COURT', sponsor: '', logo: '' };
+        for (const [key, value] of Object.entries(courtLogos)) {
+            if (court.startsWith(key)) {
+                courtInfo = value;
+                break;
+            }
+        }
+        
         const card = document.createElement('div');
         card.className = 'court-card';
         card.innerHTML = `
+            <div class="court-logo">
+                <div class="court-logo-placeholder">${courtInfo.name.split(' ')[1] || courtInfo.name[0]}</div>
+            </div>
             <div class="court-header">
-                <div class="court-name">${escapeHtml(court)}</div>
-                <div class="match-time">
-                    <span class="status-indicator ${statusClass}"></span>
-                    ${statusText} - ${escapeHtml(match.Time)}
-                </div>
+                <div class="court-name">${courtInfo.name}</div>
             </div>
             <div class="match-info">
+                <div class="match-time">
+                    <span class="status-indicator ${statusClass}"></span>
+                    ${escapeHtml(match.Time)}
+                </div>
                 <div class="team">
-                    <span class="team-label">Home:</span>
                     <span class="team-name">${escapeHtml(match['Team 1'] || 'TBA')}</span>
                 </div>
                 <div class="vs-divider">VS</div>
                 <div class="team">
-                    <span class="team-label">Away:</span>
                     <span class="team-name">${escapeHtml(match['Team 2'] || 'TBA')}</span>
                 </div>
-                ${match.MatchID && match.MatchID !== 'N/A' ? `
-                    <div class="match-id">Match ID: ${escapeHtml(match.MatchID)}</div>
-                ` : ''}
             </div>
         `;
         container.appendChild(card);
