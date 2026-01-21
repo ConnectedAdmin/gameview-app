@@ -136,30 +136,16 @@ function displayMatches(matches) {
         'Beaton Park': { name: 'BEATON PARK', sponsor: '', logo: 'https://via.placeholder.com/120/666666/FFFFFF?text=BP' }
     };
     
-    // Sort courts in order: Court 1, 2, 3, 4, Beaton Park
+    // Always display all courts in order: Court 1, 2, 3, 4, Beaton Park
     const courtOrder = ['The Snakepit-1', 'The Snakepit-2', 'The Snakepit-3', 'The Snakepit-4', 'Beaton Park'];
-    const sortedCourts = Object.keys(nextMatches).sort((a, b) => {
-        // Match court names that start with the keys
-        const courtA = courtOrder.find(c => a.startsWith(c)) || a;
-        const courtB = courtOrder.find(c => b.startsWith(c)) || b;
-        const indexA = courtOrder.indexOf(courtA);
-        const indexB = courtOrder.indexOf(courtB);
-        
-        if (indexA === -1) return 1;
-        if (indexB === -1) return -1;
-        return indexA - indexB;
-    });
     
-    sortedCourts.forEach(court => {
+    courtOrder.forEach(court => {
         const match = nextMatches[court];
         
         // Find matching court info
-        let courtInfo = { name: 'COURT', sponsor: '', logo: '' };
-        for (const [key, value] of Object.entries(courtLogos)) {
-            if (court.startsWith(key)) {
-                courtInfo = value;
-                break;
-            }
+        let courtInfo = courtLogos[court];
+        if (!courtInfo) {
+            return; // Skip if court info not found
         }
         
         const card = document.createElement('div');
