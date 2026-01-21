@@ -133,7 +133,6 @@ function displayMatches(matches) {
         container.innerHTML = `
             <div class="no-matches">
                 <h2>No Games Scheduled</h2>
-                <p>There are no more matches scheduled for today.</p>
             </div>
         `;
         return;
@@ -188,20 +187,21 @@ function displayMatches(matches) {
             <div class="court-logo">
                 <div class="court-logo-placeholder">${courtInfo.name.split(' ')[1] || courtInfo.name[0]}</div>
             </div>
-            <div class="court-header">
-                <div class="court-name">${courtInfo.name}</div>
-            </div>
-            <div class="match-info">
-                <div class="match-time">
-                    <span class="status-indicator ${statusClass}"></span>
-                    ${escapeHtml(match.Time)}
+            <div>
+                <div class="court-header">
+                    <div class="court-name">${courtInfo.name}</div>
                 </div>
-                <div class="team">
-                    <span class="team-name">${escapeHtml(match['Team 1'] || 'TBA')}</span>
-                </div>
-                <div class="vs-divider">VS</div>
-                <div class="team">
-                    <span class="team-name">${escapeHtml(match['Team 2'] || 'TBA')}</span>
+                <div class="match-info">
+                    <div class="team">
+                        <span class="team-name">${escapeHtml(match['Team 1'] || 'TBA')}</span>
+                    </div>
+                    <div class="vs-divider">vs</div>
+                    <div class="team">
+                        <span class="team-name">${escapeHtml(match['Team 2'] || 'TBA')}</span>
+                    </div>
+                    <div class="match-time">
+                        ${escapeHtml(match.Time)}
+                    </div>
                 </div>
             </div>
         `;

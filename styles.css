@@ -59,31 +59,33 @@ header h1 {
     min-height: 400px;
 }
 
-/* Court card styling - similar to Webflow */
+/* Court card styling - horizontal layout */
 .court-card {
     background: #000000;
     border: none;
     padding: 0;
-    min-width: 280px;
-    max-width: 280px;
+    min-width: 350px;
+    max-width: 350px;
     flex-shrink: 0;
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
+    flex-direction: row;
+    align-items: flex-start;
+    text-align: left;
+    gap: 15px;
 }
 
 /* Court logo */
 .court-logo {
-    width: 120px;
-    height: 120px;
+    width: 70px;
+    height: 70px;
     border-radius: 50%;
     background: white;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 20px;
     overflow: hidden;
+    flex-shrink: 0;
+    margin-top: 2px;
 }
 
 .court-logo img {
@@ -99,7 +101,7 @@ header h1 {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2.5em;
+    font-size: 1.8em;
     font-weight: bold;
     color: #333;
 }
@@ -109,25 +111,24 @@ header h1 {
     background: transparent;
     color: white;
     padding: 0;
-    margin-bottom: 15px;
-    text-align: center;
+    text-align: left;
     width: 100%;
 }
 
 .court-name {
-    font-size: 2em;
+    font-size: 1.4em;
     font-weight: normal;
     font-style: italic;
-    margin-bottom: 10px;
     color: white;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
+    line-height: 1.1;
+    margin-bottom: 5px;
 }
 
 .match-time {
-    font-size: 1em;
+    font-size: 0.8em;
     color: white;
     font-weight: normal;
-    margin-top: 5px;
 }
 
 /* Match info */
@@ -138,17 +139,18 @@ header h1 {
 }
 
 .team {
-    padding: 8px 0;
-    margin: 5px 0;
+    padding: 1px 0;
+    margin: 1px 0;
     background: transparent;
-    font-size: 1em;
+    font-size: 0.85em;
     color: white;
-    text-align: center;
+    text-align: left;
+    line-height: 1.2;
 }
 
 .team-label {
     color: #999;
-    font-size: 0.85em;
+    font-size: 0.8em;
     margin-right: 5px;
 }
 
@@ -158,11 +160,11 @@ header h1 {
 }
 
 .vs-divider {
-    text-align: center;
-    font-size: 1em;
+    text-align: left;
+    font-size: 0.8em;
     font-weight: normal;
     color: white;
-    margin: 8px 0;
+    margin: 1px 0;
 }
 
 .match-id {
@@ -183,14 +185,10 @@ header h1 {
 
 .no-matches h2 {
     color: white;
-    font-size: 2em;
-    margin-bottom: 10px;
+    font-size: 1.8em;
+    font-weight: normal;
     font-style: italic;
-}
-
-.no-matches p {
-    color: #999;
-    font-size: 1.2em;
+    margin-bottom: 0;
 }
 
 /* Footer */
@@ -244,17 +242,17 @@ footer p {
     }
     
     .court-card {
-        min-width: 240px;
-        max-width: 240px;
+        min-width: 320px;
+        max-width: 320px;
     }
     
     .court-logo {
-        width: 100px;
-        height: 100px;
+        width: 60px;
+        height: 60px;
     }
     
     .court-name {
-        font-size: 1.5em;
+        font-size: 1.2em;
     }
 }
 
