@@ -133,11 +133,11 @@ function displayMatches(matches) {
     
     // Define court logos mapping
     const courtLogos = {
-        'The Snakepit-1': { name: 'COURT 1', sponsor: 'Treadright Podiatry & Biomechanics', logo: 'https://via.placeholder.com/120/4A90E2/FFFFFF?text=TR' },
-        'The Snakepit-2': { name: 'COURT 2', sponsor: 'Active', logo: 'https://via.placeholder.com/120/E94B3C/FFFFFF?text=A' },
-        'The Snakepit-3': { name: 'COURT 3', sponsor: 'Innovatus Projects', logo: 'https://via.placeholder.com/120/7ED321/FFFFFF?text=IP' },
-        'The Snakepit-4': { name: 'COURT 4', sponsor: 'Gateway Ford', logo: 'https://via.placeholder.com/120/003D7A/FFFFFF?text=GF' },
-        'Beaton Park': { name: 'BEATON PARK', sponsor: '', logo: 'https://via.placeholder.com/120/666666/FFFFFF?text=BP' }
+        'The Snakepit-1': { name: 'COURT 1', sponsor: 'Treadright Podiatry & Biomechanics', logo: 'https://gameviewstorage.blob.core.windows.net/csvfiles/Court1.png' },
+        'The Snakepit-2': { name: 'COURT 2', sponsor: 'Active', logo: 'https://gameviewstorage.blob.core.windows.net/csvfiles/Court2.png' },
+        'The Snakepit-3': { name: 'COURT 3', sponsor: 'Innovatus Projects', logo: 'https://gameviewstorage.blob.core.windows.net/csvfiles/Court3.png' },
+        'The Snakepit-4': { name: 'COURT 4', sponsor: 'Gateway Ford', logo: 'https://gameviewstorage.blob.core.windows.net/csvfiles/Court4.png' },
+        'Beaton Park': { name: 'BEATON PARK', sponsor: '', logo: 'https://gameviewstorage.blob.core.windows.net/csvfiles/Beaton.png' }
     };
     
     // Always display all courts in order: Court 1, 2, 3, 4, Beaton Park
@@ -166,7 +166,7 @@ function displayMatches(matches) {
             
             card.innerHTML = `
                 <div class="court-logo">
-                    <div class="court-logo-placeholder">${courtInfo.name.split(' ')[1] || courtInfo.name[0]}</div>
+                    <img src="${courtInfo.logo}" alt="${courtInfo.name}" />
                 </div>
                 <div>
                     <div class="court-header">
@@ -190,7 +190,7 @@ function displayMatches(matches) {
             // Display "No Games Scheduled" for this court
             card.innerHTML = `
                 <div class="court-logo">
-                    <div class="court-logo-placeholder">${courtInfo.name.split(' ')[1] || courtInfo.name[0]}</div>
+                    <img src="${courtInfo.logo}" alt="${courtInfo.name}" />
                 </div>
                 <div>
                     <div class="court-header">
@@ -201,7 +201,6 @@ function displayMatches(matches) {
                     </div>
                 </div>
             `;
-        }
         
         container.appendChild(card);
     });
