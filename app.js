@@ -44,7 +44,7 @@ function parseMatchTime(timeStr, dateStr) {
     dateStr = dateStr.trim();
     timeStr = timeStr.trim();
     
-    // Handle both YYYY-MM-DD and M/D/YYYY formats
+    // Handle both YYYY-MM-DD and DD/MM/YYYY formats
     let year, month, day;
     if (dateStr.includes('-')) {
         // YYYY-MM-DD format
@@ -52,12 +52,14 @@ function parseMatchTime(timeStr, dateStr) {
         year = parseInt(dateParts[0]);
         month = parseInt(dateParts[1]) - 1;
         day = parseInt(dateParts[2]);
-    } else {
-        // M/D/YYYY format
+    } else if (dateStr.includes('/')) {
+        // DD/MM/YYYY format (Australian format)
         const dateParts = dateStr.split('/').map(p => p.trim());
-        month = parseInt(dateParts[0]) - 1;
-        day = parseInt(dateParts[1]);
+        day = parseInt(dateParts[0]);
+        month = parseInt(dateParts[1]) - 1;
         year = parseInt(dateParts[2]);
+    } else {
+        return null;
     }
     
     // Parse time - handle both "PM" and "pm"
