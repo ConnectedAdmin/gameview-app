@@ -201,6 +201,7 @@ function displayMatches(matches) {
                     </div>
                 </div>
             `;
+        }
         
         container.appendChild(card);
     });
