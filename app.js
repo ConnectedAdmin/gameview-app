@@ -4,7 +4,7 @@ const CONFIG = {
     csvUrl: 'https://gameviewstorage.blob.core.windows.net/csvfiles/todays_matches.csv'
 };
 
-// Fetch CSV from URL
+// Fetch CSV from URL 
 async function fetchCSV() {
     const response = await fetch(CONFIG.csvUrl);
     if (!response.ok) {
