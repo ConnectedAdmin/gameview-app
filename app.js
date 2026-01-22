@@ -37,17 +37,21 @@ function parseMatchTime(timeStr, dateStr) {
         return null;
     }
     
+    // Trim whitespace from date and time strings
+    dateStr = dateStr.trim();
+    timeStr = timeStr.trim();
+    
     // Handle both YYYY-MM-DD and M/D/YYYY formats
     let year, month, day;
     if (dateStr.includes('-')) {
         // YYYY-MM-DD format
-        const dateParts = dateStr.split('-');
+        const dateParts = dateStr.split('-').map(p => p.trim());
         year = parseInt(dateParts[0]);
-        month = parseInt(dateParts[1]) - 1;
+        month = parseInt(dateParts[1]) - 1;  // JavaScript months are 0-indexed
         day = parseInt(dateParts[2]);
     } else {
         // M/D/YYYY format
-        const dateParts = dateStr.split('/');
+        const dateParts = dateStr.split('/').map(p => p.trim());
         month = parseInt(dateParts[0]) - 1;
         day = parseInt(dateParts[1]);
         year = parseInt(dateParts[2]);
@@ -110,6 +114,7 @@ function getNextMatchPerCourt(matches) {
             // Debug logging for Court 4
             if (court === 'The Snakepit-4') {
                 console.log(`Court 4 - Match: ${match['Team 1']} vs ${match['Team 2']} at ${match.Time}`);
+                console.log(`Raw date: "${match.Date}", Raw time: "${match.Time}"`);
                 console.log(`Match time: ${matchTime.toLocaleString()}`);
                 console.log(`Current time: ${now.toLocaleString()}`);
                 console.log(`10 min after: ${tenMinutesAfterStart.toLocaleString()}`);
