@@ -9,7 +9,7 @@ body {
     background: #000000;
     min-height: 100vh;
     padding: 0;
-    overflow-x: auto;
+    overflow-x: hidden;
 }
 
 .container {
@@ -47,37 +47,42 @@ header h1 {
     color: #ff6b6b;
 }
 
-/* Horizontal scrolling courts grid */
+/* Horizontal scrolling courts grid - fully responsive */
 .courts-grid {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
     align-items: flex-start;
-    padding: 60px 40px;
-    gap: 50px;
+    padding: 5vh 2vw;
+    gap: 3vw;
     overflow-x: auto;
-    min-height: 600px;
+    min-height: 50vh;
+    width: 100%;
 }
 
-/* Court card styling - horizontal layout */
+/* Court card styling - horizontal layout - fully responsive */
 .court-card {
     background: #000000;
     border: none;
     padding: 0;
-    min-width: 500px;
-    max-width: 500px;
+    min-width: 22vw;
+    max-width: 22vw;
     flex-shrink: 0;
     display: flex;
     flex-direction: row;
     align-items: flex-start;
     text-align: left;
-    gap: 25px;
+    gap: 2vw;
 }
 
 /* Court logo */
 .court-logo {
-    width: 120px;
-    height: 120px;
+    width: 8vw;
+    height: 8vw;
+    min-width: 60px;
+    min-height: 60px;
+    max-width: 150px;
+    max-height: 150px;
     border-radius: 50%;
     background: white;
     display: flex;
@@ -85,7 +90,7 @@ header h1 {
     justify-content: center;
     overflow: hidden;
     flex-shrink: 0;
-    margin-top: 5px;
+    margin-top: 0.3vw;
 }
 
 .court-logo img {
@@ -116,17 +121,17 @@ header h1 {
 }
 
 .court-name {
-    font-size: 2.2em;
+    font-size: clamp(1.2em, 2vw, 2.5em);
     font-weight: normal;
     font-style: italic;
     color: white;
     letter-spacing: 0.5px;
     line-height: 1.1;
-    margin-bottom: 8px;
+    margin-bottom: 0.5vw;
 }
 
 .match-time {
-    font-size: 1.1em;
+    font-size: clamp(0.8em, 1.2vw, 1.3em);
     color: white;
     font-weight: normal;
 }
@@ -139,10 +144,10 @@ header h1 {
 }
 
 .team {
-    padding: 2px 0;
-    margin: 3px 0;
+    padding: 0.2vw 0;
+    margin: 0.3vw 0;
     background: transparent;
-    font-size: 1.15em;
+    font-size: clamp(0.85em, 1.1vw, 1.3em);
     color: white;
     text-align: left;
     line-height: 1.3;
@@ -150,7 +155,7 @@ header h1 {
 
 .team-label {
     color: #999;
-    font-size: 1em;
+    font-size: clamp(0.75em, 1em, 1.1em);
     margin-right: 5px;
 }
 
@@ -161,18 +166,18 @@ header h1 {
 
 .vs-divider {
     text-align: left;
-    font-size: 1em;
+    font-size: clamp(0.8em, 1vw, 1.1em);
     font-weight: normal;
     color: white;
-    margin: 2px 0;
+    margin: 0.2vw 0;
 }
 
 .no-game-message {
-    font-size: 1.1em;
+    font-size: clamp(0.85em, 1.1vw, 1.3em);
     color: white;
     text-align: left;
     line-height: 1.3;
-    margin-top: 5px;
+    margin-top: 0.5vw;
 }
 
 .match-id {
@@ -235,71 +240,6 @@ footer p {
     }
     50% {
         opacity: 0.5;
-    }
-}
-
-/* Responsive design for 1920px+ screens */
-@media (min-width: 1920px) {
-    .courts-grid {
-        padding: 80px 60px;
-        gap: 60px;
-    }
-    
-    .court-card {
-        min-width: 550px;
-        max-width: 550px;
-    }
-    
-    .court-logo {
-        width: 140px;
-        height: 140px;
-    }
-    
-    .court-name {
-        font-size: 2.5em;
-    }
-    
-    .match-time {
-        font-size: 1.2em;
-    }
-    
-    .team {
-        font-size: 1.3em;
-    }
-}
-
-/* Responsive design for smaller screens */
-@media (max-width: 768px) {
-    header h1 {
-        font-size: 1.5em;
-    }
-    
-    .courts-grid {
-        padding: 20px 10px;
-        gap: 20px;
-    }
-    
-    .court-card {
-        min-width: 320px;
-        max-width: 320px;
-        gap: 12px;
-    }
-    
-    .court-logo {
-        width: 60px;
-        height: 60px;
-    }
-    
-    .court-name {
-        font-size: 1.2em;
-    }
-    
-    .match-time {
-        font-size: 0.8em;
-    }
-    
-    .team {
-        font-size: 0.85em;
     }
 }
 
