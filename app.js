@@ -4,7 +4,7 @@ const CONFIG = {
     csvUrl: 'https://gameviewstorage.blob.core.windows.net/csvfiles/todays_matches.csv'
 };
 
-// Fetch CSV from URL 
+// Fetch CSV from URL
 async function fetchCSV() {
     const response = await fetch(CONFIG.csvUrl);
     if (!response.ok) {
@@ -80,7 +80,11 @@ function getNextMatchPerCourt(matches) {
     const courtMatches = {};
     
     matches.forEach(match => {
-        const court = match.Court || 'Unknown Court';
+        // Extract base court name (before the dash)
+        const courtFull = match.Court || 'Unknown Court';
+        const baseCourtMatch = courtFull.match(/^(The Snakepit-\d|Beaton Park)/);
+        const court = baseCourtMatch ? baseCourtMatch[1] : courtFull;
+        
         if (!courtMatches[court]) {
             courtMatches[court] = [];
         }
