@@ -77,10 +77,10 @@ header h1 {
 
 /* Court logo */
 .court-logo {
-    width: 8vw;
-    height: 8vw;
-    min-width: 60px;
-    min-height: 60px;
+    width: 6vw;
+    height: 6vw;
+    min-width: 50px;
+    min-height: 50px;
     max-width: 150px;
     max-height: 150px;
     border-radius: 50%;
