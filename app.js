@@ -114,15 +114,35 @@ function getNextMatchPerCourt(matches) {
             const matchTime = match.parsedTime;
             const tenMinutesAfterStart = new Date(matchTime.getTime() + 10 * 60 * 1000);
             
+            // Debug logging for Courts 1 and 4
+            if (court === 'The Snakepit-1' || court === 'The Snakepit-4') {
+                console.log(`\n${court} - Match: ${match['Team 1']} vs ${match['Team 2']} at ${match.Time}`);
+                console.log(`Raw date: "${match.Date}", Raw time: "${match.Time}"`);
+                console.log(`Parsed time: ${matchTime.toLocaleString('en-AU')}`);
+                console.log(`Current time: ${now.toLocaleString('en-AU')}`);
+                console.log(`10 min after: ${tenMinutesAfterStart.toLocaleString('en-AU')}`);
+                console.log(`Time diff (mins): ${(now - matchTime) / (1000 * 60)}`);
+                console.log(`Conditions: now >= match: ${now >= matchTime}, now < 10min after: ${now < tenMinutesAfterStart}, now < match: ${now < matchTime}`);
+            }
+            
             // Show match if current time is at or after start time AND before 10 minutes past start
             if (now >= matchTime && now < tenMinutesAfterStart) {
                 nextMatch = match;
+                if (court === 'The Snakepit-1' || court === 'The Snakepit-4') {
+                    console.log(`-> SELECTED (currently playing)`);
+                }
                 break;
             }
             // If we haven't reached this match yet, show it as next
             if (now < matchTime) {
                 nextMatch = match;
+                if (court === 'The Snakepit-1' || court === 'The Snakepit-4') {
+                    console.log(`-> SELECTED (upcoming)`);
+                }
                 break;
+            }
+            if (court === 'The Snakepit-1' || court === 'The Snakepit-4') {
+                console.log(`-> SKIPPED (game ended)`);
             }
         }
         
