@@ -4,6 +4,9 @@ const CONFIG = {
     csvUrl: 'https://gameviewstorage.blob.core.windows.net/csvfiles/todays_matches.csv'
 };
 
+// Store the current matches data
+let currentMatches = [];
+
 // Fetch CSV from URL
 async function fetchCSV() {
     const response = await fetch(CONFIG.csvUrl);
@@ -84,7 +87,11 @@ function getNextMatchPerCourt(matches) {
     const courtMatches = {};
     
     matches.forEach(match => {
-        const court = match.Court || 'Unknown Court';
+        // Extract base court name (before the dash)
+        const courtFull = match.Court || 'Unknown Court';
+        const baseCourtMatch = courtFull.match(/^(The Snakepit-\d|Beaton Park)/);
+        const court = baseCourtMatch ? baseCourtMatch[1] : courtFull;
+        
         if (!courtMatches[court]) {
             courtMatches[court] = [];
         }
@@ -107,15 +114,19 @@ function getNextMatchPerCourt(matches) {
             const matchTime = match.parsedTime;
             const tenMinutesAfterStart = new Date(matchTime.getTime() + 10 * 60 * 1000);
             
-            if (now < tenMinutesAfterStart) {
+            // Show match if current time is at or after start time AND before 10 minutes past start
+            if (now >= matchTime && now < tenMinutesAfterStart) {
+                nextMatch = match;
+                break;
+            }
+            // If we haven't reached this match yet, show it as next
+            if (now < matchTime) {
                 nextMatch = match;
                 break;
             }
         }
         
-        if (nextMatch) {
-            nextMatches[court] = nextMatch;
-        }
+        nextMatches[court] = nextMatch; // Set to null if no match found
     });
     
     return nextMatches;
@@ -133,82 +144,78 @@ function displayMatches(matches) {
     
     const nextMatches = getNextMatchPerCourt(matches);
     
-    if (Object.keys(nextMatches).length === 0) {
-        container.innerHTML = `
-            <div class="no-matches">
-                <h2>No Games Scheduled</h2>
-                <p>There are no more matches scheduled for today.</p>
-            </div>
-        `;
-        return;
-    }
-    
     // Define court logos mapping
     const courtLogos = {
-        'The Snakepit-1': { name: 'COURT 1', sponsor: 'Treadright Podiatry & Biomechanics', logo: 'https://via.placeholder.com/120/4A90E2/FFFFFF?text=TR' },
-        'The Snakepit-2': { name: 'COURT 2', sponsor: 'Active', logo: 'https://via.placeholder.com/120/E94B3C/FFFFFF?text=A' },
-        'The Snakepit-3': { name: 'COURT 3', sponsor: 'Innovatus Projects', logo: 'https://via.placeholder.com/120/7ED321/FFFFFF?text=IP' },
-        'The Snakepit-4': { name: 'COURT 4', sponsor: 'Gateway Ford', logo: 'https://via.placeholder.com/120/003D7A/FFFFFF?text=GF' },
-        'Beaton Park': { name: 'BEATON PARK', sponsor: '', logo: 'https://via.placeholder.com/120/666666/FFFFFF?text=BP' }
+        'The Snakepit-1': { name: 'COURT 1', sponsor: 'Treadright Podiatry & Biomechanics', logo: 'https://gameviewstorage.blob.core.windows.net/csvfiles/Court1.png' },
+        'The Snakepit-2': { name: 'COURT 2', sponsor: 'Active', logo: 'https://gameviewstorage.blob.core.windows.net/csvfiles/Court2.png' },
+        'The Snakepit-3': { name: 'COURT 3', sponsor: 'Innovatus Projects', logo: 'https://gameviewstorage.blob.core.windows.net/csvfiles/Court3.png' },
+        'The Snakepit-4': { name: 'COURT 4', sponsor: 'Gateway Ford', logo: 'https://gameviewstorage.blob.core.windows.net/csvfiles/Court4.png' },
+        'Beaton Park': { name: 'BEATON PARK', sponsor: '', logo: 'https://gameviewstorage.blob.core.windows.net/csvfiles/Beaton.png' }
     };
     
-    // Sort courts in order: Court 1, 2, 3, 4, Beaton Park
+    // Always display all courts in order: Court 1, 2, 3, 4, Beaton Park
     const courtOrder = ['The Snakepit-1', 'The Snakepit-2', 'The Snakepit-3', 'The Snakepit-4', 'Beaton Park'];
-    const sortedCourts = Object.keys(nextMatches).sort((a, b) => {
-        // Match court names that start with the keys
-        const courtA = courtOrder.find(c => a.startsWith(c)) || a;
-        const courtB = courtOrder.find(c => b.startsWith(c)) || b;
-        const indexA = courtOrder.indexOf(courtA);
-        const indexB = courtOrder.indexOf(courtB);
-        
-        if (indexA === -1) return 1;
-        if (indexB === -1) return -1;
-        return indexA - indexB;
-    });
     
-    sortedCourts.forEach(court => {
+    courtOrder.forEach(court => {
         const match = nextMatches[court];
-        const now = new Date();
-        const matchTime = match.parsedTime;
-        const tenMinutesAfterStart = new Date(matchTime.getTime() + 10 * 60 * 1000);
-        
-        // Determine if match is live or upcoming
-        const isLive = now >= matchTime && now < tenMinutesAfterStart;
-        const statusClass = isLive ? 'status-live' : 'status-upcoming';
-        const statusText = isLive ? 'LIVE NOW' : 'UPCOMING';
         
         // Find matching court info
-        let courtInfo = { name: 'COURT', sponsor: '', logo: '' };
-        for (const [key, value] of Object.entries(courtLogos)) {
-            if (court.startsWith(key)) {
-                courtInfo = value;
-                break;
-            }
+        let courtInfo = courtLogos[court];
+        if (!courtInfo) {
+            return; // Skip if court info not found
         }
         
         const card = document.createElement('div');
         card.className = 'court-card';
-        card.innerHTML = `
-            <div class="court-logo">
-                <div class="court-logo-placeholder">${courtInfo.name.split(' ')[1] || courtInfo.name[0]}</div>
-            </div>
-            <div class="court-header">
-                <div class="court-name">${courtInfo.name}</div>
-            </div>
-            <div class="match-info">
-                <div class="match-time">
-                    <span class="status-indicator ${statusClass}"></span>
-                    ${escapeHtml(match.Time)}
+        
+        if (match) {
+            // Display match information
+            const now = new Date();
+            const matchTime = match.parsedTime;
+            const tenMinutesAfterStart = new Date(matchTime.getTime() + 10 * 60 * 1000);
+            
+            const isLive = now >= matchTime && now < tenMinutesAfterStart;
+            const statusClass = isLive ? 'status-live' : 'status-upcoming';
+            
+            card.innerHTML = `
+                <div class="court-logo">
+                    <img src="${courtInfo.logo}" alt="${courtInfo.name}" />
                 </div>
-                <div class="team">
-                    <span class="team-name">${escapeHtml(match['Team 1'] || 'TBA')}</span>
+                <div>
+                    <div class="court-header">
+                        <div class="court-name">${courtInfo.name}</div>
+                    </div>
+                    <div class="match-info">
+                        <div class="team">
+                            <span class="team-name">${escapeHtml(match['Team 1'] || 'TBA')}</span>
+                        </div>
+                        <div class="vs-divider">vs</div>
+                        <div class="team">
+                            <span class="team-name">${escapeHtml(match['Team 2'] || 'TBA')}</span>
+                        </div>
+                        <div class="match-time">
+                            ${escapeHtml(match.Time)}
+                        </div>
+                    </div>
                 </div>
-                <div class="vs-divider">VS</div>
-                <div class="team">
-                    <span class="team-name">${escapeHtml(match['Team 2'] || 'TBA')}</span>
+            `;
+        } else {
+            // Display "No Games Scheduled" for this court
+            card.innerHTML = `
+                <div class="court-logo">
+                    <img src="${courtInfo.logo}" alt="${courtInfo.name}" />
                 </div>
-            </div>
-        `;
+                <div>
+                    <div class="court-header">
+                        <div class="court-name">${courtInfo.name}</div>
+                    </div>
+                    <div class="match-info">
+                        <div class="no-game-message">No Games Scheduled</div>
+                    </div>
+                </div>
+            `;
+        }
+        
         container.appendChild(card);
     });
 }
@@ -248,8 +255,8 @@ function updateLastUpdateTime() {
     });
 }
 
-// Main function to load and display matches
-async function loadMatches() {
+// Load CSV data and store it
+async function fetchAndStoreMatches() {
     const errorDiv = document.getElementById('error');
     const loading = document.getElementById('loading');
     
@@ -258,9 +265,9 @@ async function loadMatches() {
         errorDiv.style.display = 'none';
         
         const csvText = await fetchCSV();
-        const matches = parseCSV(csvText);
+        currentMatches = parseCSV(csvText);
         
-        displayMatches(matches);
+        displayMatches(currentMatches);
         updateLastUpdateTime();
         
     } catch (error) {
@@ -276,9 +283,15 @@ async function init() {
     updateCurrentTime();
     setInterval(updateCurrentTime, 1000);
     
-    await loadMatches();
+    await fetchAndStoreMatches();
     
-    setInterval(loadMatches, 2 * 60 * 1000);
+    // Refresh display every minute to update which match should be shown
+    setInterval(() => {
+        displayMatches(currentMatches);
+    }, 60 * 1000);
+    
+    // Reload CSV data every 5 minutes
+    setInterval(fetchAndStoreMatches, 5 * 60 * 1000);
 }
 
 // Start the app when DOM is ready
