@@ -107,7 +107,13 @@ function getNextMatchPerCourt(matches) {
             const matchTime = match.parsedTime;
             const tenMinutesAfterStart = new Date(matchTime.getTime() + 10 * 60 * 1000);
             
-            if (now < tenMinutesAfterStart) {
+            // Show match if current time is at or after start time AND before 10 minutes past start
+            if (now >= matchTime && now < tenMinutesAfterStart) {
+                nextMatch = match;
+                break;
+            }
+            // If we haven't reached this match yet, show it as next
+            if (now < matchTime) {
                 nextMatch = match;
                 break;
             }
