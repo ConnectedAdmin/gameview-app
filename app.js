@@ -1,4 +1,4 @@
-// Direct CSV URL Access - No authentication needed
+/ Direct CSV URL Access - No authentication needed
 
 const CONFIG = {
     csvUrl: 'https://gameviewstorage.blob.core.windows.net/csvfiles/todays_matches.csv'
