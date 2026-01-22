@@ -248,8 +248,11 @@ function updateLastUpdateTime() {
     });
 }
 
-// Main function to load and display matches
-async function loadMatches() {
+// Store the current matches data
+let currentMatches = [];
+
+// Load CSV data
+async function fetchAndStoreMatches() {
     const errorDiv = document.getElementById('error');
     const loading = document.getElementById('loading');
     
@@ -258,9 +261,9 @@ async function loadMatches() {
         errorDiv.style.display = 'none';
         
         const csvText = await fetchCSV();
-        const matches = parseCSV(csvText);
+        currentMatches = parseCSV(csvText);
         
-        displayMatches(matches);
+        displayMatches(currentMatches);
         updateLastUpdateTime();
         
     } catch (error) {
@@ -276,9 +279,15 @@ async function init() {
     updateCurrentTime();
     setInterval(updateCurrentTime, 1000);
     
-    await loadMatches();
+    await fetchAndStoreMatches();
     
-    setInterval(loadMatches, 2 * 60 * 1000);
+    // Refresh display every minute to update which match should be shown
+    setInterval(() => {
+        displayMatches(currentMatches);
+    }, 60 * 1000);
+    
+    // Reload CSV data every 5 minutes
+    setInterval(fetchAndStoreMatches, 5 * 60 * 1000);
 }
 
 // Start the app when DOM is ready
