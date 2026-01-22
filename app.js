@@ -107,6 +107,16 @@ function getNextMatchPerCourt(matches) {
             const matchTime = match.parsedTime;
             const tenMinutesAfterStart = new Date(matchTime.getTime() + 10 * 60 * 1000);
             
+            // Debug logging for Court 4
+            if (court === 'The Snakepit-4') {
+                console.log(`Court 4 - Match: ${match['Team 1']} vs ${match['Team 2']} at ${match.Time}`);
+                console.log(`Match time: ${matchTime.toLocaleString()}`);
+                console.log(`Current time: ${now.toLocaleString()}`);
+                console.log(`10 min after: ${tenMinutesAfterStart.toLocaleString()}`);
+                console.log(`Now >= match: ${now >= matchTime}, Now < 10min after: ${now < tenMinutesAfterStart}`);
+                console.log(`Now < match: ${now < matchTime}`);
+            }
+            
             // Show match if current time is at or after start time AND before 10 minutes past start
             if (now >= matchTime && now < tenMinutesAfterStart) {
                 nextMatch = match;
