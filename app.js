@@ -9,21 +9,41 @@ let currentMatches = [];
 
 // Fetch CSV from URL
 async function fetchCSV() {
-    const response = await fetch(CONFIG.csvUrl);
-    if (!response.ok) {
-        throw new Error(`Failed to fetch CSV: ${response.statusText}`);
+    try {
+        const response = await fetch(CONFIG.csvUrl, {
+            method: 'GET',
+            headers: {
+                'Accept': 'text/csv',
+                'Access-Control-Allow-Origin': '*'
+            },
+            mode: 'cors'
+        });
+        
+        if (!response.ok) {
+            throw new Error(`Failed to fetch CSV: ${response.statusText}`);
+        }
+        return await response.text();
+    } catch (error) {
+        console.error('Fetch error:', error);
+        throw error;
     }
-    return await response.text();
 }
 
-// Parse CSV data
+// Parse CSV data - properly handle quoted fields with commas
 function parseCSV(csvText) {
     const lines = csvText.trim().split('\n');
-    const headers = lines[0].split(',').map(h => h.trim());
+    if (lines.length < 2) {
+        return [];
+    }
+    
+    // Parse header line
+    const headers = parseCSVLine(lines[0]);
     
     const data = [];
     for (let i = 1; i < lines.length; i++) {
-        const values = lines[i].split(',').map(v => v.trim());
+        if (lines[i].trim() === '') continue; // Skip empty lines
+        
+        const values = parseCSVLine(lines[i]);
         const row = {};
         headers.forEach((header, index) => {
             row[header] = values[index] || '';
@@ -32,6 +52,40 @@ function parseCSV(csvText) {
     }
     
     return data;
+}
+
+// Parse a single CSV line handling quoted fields
+function parseCSVLine(line) {
+    const result = [];
+    let current = '';
+    let insideQuotes = false;
+    
+    for (let i = 0; i < line.length; i++) {
+        const char = line[i];
+        const nextChar = line[i + 1];
+        
+        if (char === '"') {
+            if (insideQuotes && nextChar === '"') {
+                // Escaped quote
+                current += '"';
+                i++;
+            } else {
+                // Toggle quote state
+                insideQuotes = !insideQuotes;
+            }
+        } else if (char === ',' && !insideQuotes) {
+            // Field separator
+            result.push(current.trim());
+            current = '';
+        } else {
+            current += char;
+        }
+    }
+    
+    // Add last field
+    result.push(current.trim());
+    
+    return result;
 }
 
 // Parse time string and return Date object
@@ -91,8 +145,10 @@ function getNextMatchPerCourt(matches) {
     matches.forEach(match => {
         // Extract base court name (before the dash)
         const courtFull = match.Court || 'Unknown Court';
-        const baseCourtMatch = courtFull.match(/^(The Snakepit-\d|Beaton Park)/);
-        const court = baseCourtMatch ? baseCourtMatch[1] : courtFull;
+        
+        // Extract court number (1, 2, 3, 4) from the court name
+        const courtMatch = courtFull.match(/The Snakepit-(\d)/);
+        const court = courtMatch ? `The Snakepit-${courtMatch[1]}` : courtFull;
         
         if (!courtMatches[court]) {
             courtMatches[court] = [];
@@ -289,6 +345,8 @@ async function fetchAndStoreMatches() {
         const csvText = await fetchCSV();
         currentMatches = parseCSV(csvText);
         
+        console.log('Parsed matches:', currentMatches);
+        
         displayMatches(currentMatches);
         updateLastUpdateTime();
         
@@ -296,7 +354,7 @@ async function fetchAndStoreMatches() {
         console.error('Error loading matches:', error);
         loading.style.display = 'none';
         errorDiv.style.display = 'block';
-        errorDiv.textContent = `Error loading matches: ${error.message}. Please check your CSV URL configuration.`;
+        errorDiv.textContent = `Error loading matches: ${error.message}. Please check the console for details.`;
     }
 }
 
