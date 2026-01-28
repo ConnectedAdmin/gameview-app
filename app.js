@@ -146,8 +146,8 @@ function getNextMatchPerCourt(matches) {
         // Extract base court name (before the dash)
         const courtFull = match.Court || 'Unknown Court';
         
-        // Extract court number (1, 2, 3, 4) from the court name
-        const courtMatch = courtFull.match(/The Snakepit-(\d)/);
+        // Extract court number (1, 2, 3, 4) from the court name - handle spaces around dash
+        const courtMatch = courtFull.match(/The Snakepit\s*-\s*(\d)/);
         const court = courtMatch ? `The Snakepit-${courtMatch[1]}` : courtFull;
         
         if (!courtMatches[court]) {
